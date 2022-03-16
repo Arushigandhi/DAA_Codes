@@ -1,6 +1,6 @@
 # DAA_Codes
 
-##Lab 1
+## Lab 1
 
 Objectives:
 1. Understand Algorithm and Algorithm Design Techniques
