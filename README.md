@@ -29,3 +29,6 @@ WAP for the following and find time complexity using step count method
 
 **Resources**
 1. [DFS](https://www.programiz.com/dsa/graph-dfs)
+2. [BFS](https://www.programiz.com/dsa/graph-bfs)
+3. [Strongly connected components](https://www.programiz.com/dsa/strongly-connected-components)
+4. [Mother Vertex](https://www.geeksforgeeks.org/find-a-mother-vertex-in-a-graph/)
