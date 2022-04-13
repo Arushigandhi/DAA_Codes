@@ -1,109 +1,70 @@
+
 #include <iostream>
-#include <bits/stdc++.h>
-#include <algorithm>
 using namespace std;
-const int inf = 9999;
+#include <limits.h>
 
-class Graph
+
+#define V 9
+
+int minDistance(int dist[], bool sptSet[])
 {
-private:
-    int **adj;
-    int n;
 
-public:
-    Graph(int numb)
-    {
-        n = numb + 1;
-        adj = new int *[n];
-        for (int i = 0; i < n; ++i)
-            adj[i] = new int[n];
-        for (int i = 0; i < n; ++i)
-        {
-            for (int j = 0; j < n; j++)
-                adj[i][j] = inf;
-            adj[i][i] = 0;
-        }
-    }
-    void addVertex(int src, int dest, int cost)
-    {
-        adj[src][dest] = cost;
-    }
 
-    void dijkstra(int src)
-    {
-        int cost[n];
-        int pre[n] = {0};
-        bool visited[n] = {false};
+	int min = INT_MAX, min_index;
 
-        auto compare =
-            [=](int lhs, int rhs)
-        {
-            return adj[src][lhs] > adj[src][rhs];
-        };
-        priority_queue<int, vector<int>, decltype(compare)> list(compare);
+	for (int v = 0; v < V; v++)
+		if (sptSet[v] == false && dist[v] <= min)
+			min = dist[v], min_index = v;
 
-        for (int i = 1; i < n; i++)
-        {
-            cost[i] = adj[src][i];
-            if (cost[i] != inf && cost[i] != 0)
-            {
-                pre[i] = src;
-                list.push(i);
-                visited[i] = true;
-            }
-        }
+	return min_index;
+}
 
-        while (!list.empty())
-        {
-            int i = list.top();
-            list.pop();
-            for (int j = 1; j < n; j++)
-            {
-                int temp = min(cost[j], cost[i] + adj[i][j]);
-                if (temp != cost[j])
-                {
-                    cost[j] = temp;
-                    pre[j] = i;
-                    if (!visited[j])
-                    {
-                        list.push(j);
-                        visited[j] = true;
-                    }
-                }
-            }
-        }
+void printSolution(int dist[])
+{
+	cout <<"Vertex \t Distance from Source" << endl;
+	for (int i = 0; i < V; i++)
+		cout << i << " \t\t"<<dist[i]<< endl;
+}
 
-        cout << "             ";
-        for (int i = 1; i < n; i++)
-            cout << i << " ";
-        cout << endl
-             << "Cost:        ";
-        for (int i = 1; i < n; i++)
-            cout << cost[i] << " ";
-        cout << endl
-             << "Predecessor: ";
-        for (int i = 1; i < n; i++)
-            cout << pre[i] << " ";
-    }
-};
+void dijkstra(int graph[V][V], int src)
+{
+	int dist[V];
+	bool sptSet[V];
+	for (int i = 0; i < V; i++)
+		dist[i] = INT_MAX, sptSet[i] = false;
+
+	dist[src] = 0;
+
+
+	for (int count = 0; count < V - 1; count++) {
+
+		int u = minDistance(dist, sptSet);
+		sptSet[u] = true;
+		for (int v = 0; v < V; v++)
+
+			if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX
+				&& dist[u] + graph[u][v] < dist[v])
+				dist[v] = dist[u] + graph[u][v];
+	}
+
+	printSolution(dist);
+}
 
 int main()
 {
-    int n;
-    cout << "Enter size:";
-    cin >> n;
-    Graph G(n);
-    cout << "Enter edges and cost: (<-1, -1> to stop)" << endl;
-    int a, b, cost;
-    while (true)
-    {
-        cin >> a >> b >> cost;
-        if (a != -1 && b != -1)
-            G.addVertex(a, b, cost);
-        else
-            break;
-    }
-    cout << "Enter the source:";
-    cin >> n;
-    G.dijkstra(n);
+
+	int graph[V][V] = { { 0, 4, 0, 0, 0, 0, 0, 8, 0 },
+						{ 4, 0, 8, 0, 0, 0, 0, 11, 0 },
+						{ 0, 8, 0, 7, 0, 4, 0, 0, 2 },
+						{ 0, 0, 7, 0, 9, 14, 0, 0, 0 },
+						{ 0, 0, 0, 9, 0, 10, 0, 0, 0 },
+						{ 0, 0, 4, 14, 10, 0, 2, 0, 0 },
+						{ 0, 0, 0, 0, 0, 2, 0, 1, 6 },
+						{ 8, 11, 0, 0, 0, 0, 1, 0, 7 },
+						{ 0, 0, 2, 0, 0, 0, 6, 7, 0 } };
+
+	dijkstra(graph, 0);
+
+	return 0;
 }
+
