@@ -1,55 +1,81 @@
+// C++ program of above implementation
 #include <iostream>
-#include <bits/stdc++.h>
 using namespace std;
 
-pair<int, int> getminmax(int a[], int low, int high)
+// structure is used to return
+// two values from minMax()
+struct Pair
 {
-    pair<int, int> minmax;
+    int min;
+    int max;
+};
+
+struct Pair getMinMax(int arr[], int low,
+                      int high)
+{
+    struct Pair minmax, mml, mmr;
+    int mid;
+
+    // If there is only one element
     if (low == high)
     {
-        minmax.first = a[low];
-        minmax.second = a[low];
+        minmax.max = arr[low];
+        minmax.min = arr[low];
         return minmax;
     }
+
+    // If there are two elements
     if (high == low + 1)
     {
-        if (a[low] > a[high])
+        if (arr[low] > arr[high])
         {
-            minmax.second = a[low];
-            minmax.first = a[high];
+            minmax.max = arr[low];
+            minmax.min = arr[high];
         }
         else
         {
-            minmax.second = a[high];
-            minmax.first = a[low];
+            minmax.max = arr[high];
+            minmax.min = arr[low];
         }
         return minmax;
     }
 
-    int mid = (low + high) / 2;
-    pair<int, int> ml = getminmax(a, low, mid);
-    pair<int, int> mr = getminmax(a, mid + 1, high);
+    // If there are more than 2 elements
+    mid = (low + high) / 2;
+    mml = getMinMax(arr, low, mid);
+    mmr = getMinMax(arr, mid + 1, high);
 
-    if (ml.first < mr.first)
-        minmax.first = ml.first;
+    // Compare minimums of two parts
+    if (mml.min < mmr.min)
+        minmax.min = mml.min;
     else
-        minmax.first = mr.first;
-    if (ml.second < mr.second)
-        minmax.second = mr.second;
+        minmax.min = mmr.min;
+
+    // Compare maximums of two parts
+    if (mml.max > mmr.max)
+        minmax.max = mml.max;
     else
-        minmax.second = ml.second;
+        minmax.max = mmr.max;
+
     return minmax;
 }
 
+// Driver code
 int main()
 {
-    int n;
-    cout << "Enter size:";
-    cin >> n;
-    int a[n];
-    for (int i = 0; i < n; i++)
-        cin >> a[i];
-    pair<int, int> minmax = getminmax(a, 0, n - 1);
-    cout << "\nMinimum element is : " << minmax.first;
-    cout << "\nMaximum element is : " << minmax.second;
+    int arr[] = {1000, 11, 445,
+                 1, 330, 3000};
+    int arr_size = 6;
+
+    struct Pair minmax = getMinMax(arr, 0,
+                                   arr_size - 1);
+
+    cout << "Minimum element is "
+         << minmax.min << endl;
+    cout << "Maximum element is "
+         << minmax.max;
+
+    return 0;
 }
+
+// This code is contributed by nik_3112
