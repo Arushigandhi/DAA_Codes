@@ -16,11 +16,11 @@ int partition(int arr[], int l, int r)
     {
         if (arr[j] < pivot)
         {
-            i++;
-            swap(arr, i, j);
+            i++; //putting element at the beginning
+            swap(arr, i, j); //swapping pos ele with ele smaller than pivor
         }
     }
-    swap(arr, i + 1, r);
+    swap(arr, i + 1, r); //final swap to put pivot in correct place
     return i + 1;
 }
 void quicksort(int arr[], int l, int r)
